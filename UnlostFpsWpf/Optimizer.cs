@@ -847,94 +847,76 @@ public static class Optimizer
 
     private static async Task CleanupDesktopAsync(Action<string> log)
     {
+        // Hızlı ve doğrudan taşıma modu: kopyalama yok, derin attribute/izin işlemleri yok
         await Task.Run(() =>
         {
             var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             if (!Directory.Exists(desktop)) { log("Desktop folder not found."); return; }
-            
-            // Always use "Masaüstü" as folder name as requested
-            var target = Path.Combine(desktop, "Masaüstü");
+
+            // Klasör adı sabit: "Masaüstü" (varsa zaman damgalı yedek isim)
+            var baseTargetName = "Masaüstü";
+            var target = Path.Combine(desktop, baseTargetName);
             if (Directory.Exists(target))
-            {
-                // If folder exists, create a unique name with timestamp
-                target = Path.Combine(desktop, $"Masaüstü_{DateTime.Now:yyyyMMdd_HHmm}");
-            }
-            
+                target = Path.Combine(desktop, $"{baseTargetName}_{DateTime.Now:yyyyMMdd_HHmm}");
+
             Directory.CreateDirectory(target);
-            int moved = 0;
-            // Not: Kullanıcı isteği gereği hiçbir dosya/klasör silinmeyecek.
-            int scheduled = 0;
-            
-            // Get current process info to avoid moving self
-            var currentProcess = Process.GetCurrentProcess();
-            var currentExePath = currentProcess.MainModule?.FileName ?? "";
+
+            int moved = 0, skipped = 0, errors = 0;
+
+            // Kendi EXE'mizi koru
+            var currentExePath = Process.GetCurrentProcess().MainModule?.FileName ?? string.Empty;
             var currentExeName = Path.GetFileName(currentExePath);
-            
-            // Get all files and directories on desktop
-            var allItems = Directory.GetFileSystemEntries(desktop, "*", SearchOption.TopDirectoryOnly);
-            
-            foreach (var path in allItems)
+
+            // Büyük listelerde RAM tüketimini azaltmak için Enumerate kullan
+            foreach (var path in Directory.EnumerateFileSystemEntries(desktop, "*", SearchOption.TopDirectoryOnly))
             {
                 try
                 {
                     var name = Path.GetFileName(path);
-                    if (string.IsNullOrEmpty(name)) continue;
-                    
-                    // Skip the target folder itself
-                    if (string.Equals(path, target, StringComparison.OrdinalIgnoreCase)) continue;
-                    
-                    // Skip our own executable (unlostfpsarttirma.exe)
-                    if (string.Equals(name, currentExeName, StringComparison.OrdinalIgnoreCase)) 
+                    if (string.IsNullOrEmpty(name)) { skipped++; continue; }
+
+                    // Hedef klasörün kendisi veya uygulamanın EXE'si ise geç
+                    if (string.Equals(path, target, StringComparison.OrdinalIgnoreCase)) { skipped++; continue; }
+                    if (string.Equals(name, currentExeName, StringComparison.OrdinalIgnoreCase)) { skipped++; continue; }
+                    // Unlost adındaki .exe'leri güvenlik için geç
+                    if (name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) && name.Contains("unlost", StringComparison.OrdinalIgnoreCase))
+                    { skipped++; continue; }
+
+                    var dest = EnsureUniquePath(Path.Combine(target, name));
+
+                    // Yalnızca üst seviye öznitelikleri temizle (derin tarama yok)
+                    try
                     {
-                        log($"🛡️ Kendi uygulama dosyası korundu: {name}");
-                        continue;
+                        if (File.Exists(path)) File.SetAttributes(path, FileAttributes.Normal);
+                        else if (Directory.Exists(path)) File.SetAttributes(path, FileAttributes.Normal);
                     }
-                    
-                    // Also skip any exe with "unlost" in name (safety)
-                    if (name.ToLowerInvariant().Contains("unlost") && name.ToLowerInvariant().EndsWith(".exe"))
+                    catch { }
+
+                    // Doğrudan taşıma (aynı birimde anında, farklı birimde OS kopyala+sil yapar)
+                    if (File.Exists(path))
                     {
-                        log($"🛡️ Unlost uygulaması korundu: {name}");
-                        continue;
+                        File.Move(path, dest);
+                        moved++;
                     }
-                    
-                    var dest = Path.Combine(target, name);
-                    dest = EnsureUniquePath(dest);
-
-                    // Önce öznitelikleri temizle (salt okunur/hidden vb.)
-                    TryClearAttributes(path);
-
-                    // Birincil yol: doğrudan taşı
-                    bool success = TryMove(path, dest);
-                    if (success) { moved++; continue; }
-
-                    // Yetki sorunu: icacls ile izin verip tekrar dene (Admin gerekli)
-                    if (IsAdministrator())
+                    else if (Directory.Exists(path))
                     {
-                        TryGrantFullAccess(path, log);
-                        TryClearAttributes(path);
-                        success = TryMove(path, dest);
-                        if (success) { moved++; continue; }
+                        Directory.Move(path, dest);
+                        moved++;
                     }
-
-                    // Son çare: yeniden başlatmada taşıma planla (Admin gerekir)
-                    if (IsAdministrator())
+                    else
                     {
-                        if (ScheduleMoveOnReboot(path, dest)) { scheduled++; continue; }
+                        skipped++;
                     }
-
-                    // Hala olmadıysa hata ver
-                    throw new IOException("Taşıma başarısız (kilitli veya izin engeli)");
                 }
                 catch (Exception ex)
                 {
+                    errors++;
+                    // Aşırı log ile UI'yi yormamak için yalnızca hatayı kısa geç
                     log($"Masaüstü taşıma hatası: {Path.GetFileName(path)} - {ex.Message}");
                 }
             }
-            
-            var msg = $"✅ Masaüstü düzenlendi: {moved} taşındı";
-            if (scheduled > 0) msg += $", {scheduled} öğe yeniden başlatmada taşınacak";
-            msg += $" → '{Path.GetFileName(target)}'";
-            log(msg);
+
+            log($"✅ Masaüstü düzenlendi: {moved} taşındı, {skipped} atlandı, {errors} hata → '{Path.GetFileName(target)}'");
         });
     }
 
