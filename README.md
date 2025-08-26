@@ -13,14 +13,6 @@ Ultra-modern cam/liquid temalı, tek tıkla güvenli performans optimizasyonlar�
 
 > Not: Bazı ayarlar için yönetici hakları gerekir. Uygulama gerektiğinde yükseltme ister.
 
-## Kurulum ve Çalıştırma
-Uygulama “portable” tek dosya EXE olarak yayınlanabilir, .NET kurulumuna gerek yoktur.
-
-- Geliştiriciler için: `UnlostFpsWpf` projesini açın ve aşağıdaki komutla tek dosya yayın alın.
-  - Windows x64, self-contained, tek dosya yayın (Release):
-    - VS Code Görevleri ile hazırdır veya `dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish`
-  - Çıktı: `UnlostFpsWpf/publish/unlostfpsbooster.exe`
-
 ## Geri Alma
 - Güç planı: Denetim Masası > Güç Seçenekleri’nden önceki planı seçin.
 - Görsel efektler: Sistem > Gelişmiş Sistem Ayarları > Performans > Görsel Efektler.
