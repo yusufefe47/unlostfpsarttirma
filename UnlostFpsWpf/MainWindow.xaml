@@ -1,0 +1,700 @@
+<Window x:Class="UnlostFpsWpf.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    Title="unlostfpsarttirma - Professional Edition" 
+    Icon="pack://application:,,,/Assets/app.ico"
+        Height="900" Width="1200" 
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
+        WindowStyle="None"
+        AllowsTransparency="False"
+        Background="#0F172A">
+        <!--
+            Background image instructions:
+            - Put your JPG/PNG under: UnlostFpsWpf/Assets/background.jpg
+            - Recommended size: 1920x1080 or 2560x1440
+            - Optimize with JPEG quality ~75-85 or PNGQuant to keep EXE size small
+            - You can change the filename/brush URI below if needed
+        -->
+    
+    <Window.Resources>
+        <!-- Professional Color Palette -->
+        <SolidColorBrush x:Key="PrimaryBackground" Color="#0A0A0A"/>
+        <SolidColorBrush x:Key="SecondaryBackground" Color="#1A1A1A"/>
+        <SolidColorBrush x:Key="CardBackground" Color="#242424"/>
+        <SolidColorBrush x:Key="AccentPrimary" Color="#00D4FF"/>
+        <SolidColorBrush x:Key="AccentSecondary" Color="#7C3AED"/>
+        <SolidColorBrush x:Key="AccentSuccess" Color="#10B981"/>
+        <SolidColorBrush x:Key="AccentWarning" Color="#F59E0B"/>
+        <SolidColorBrush x:Key="AccentDanger" Color="#EF4444"/>
+        <SolidColorBrush x:Key="TextPrimary" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="TextSecondary" Color="#B0B0B0"/>
+        <SolidColorBrush x:Key="TextMuted" Color="#6B7280"/>
+        
+        <!-- Professional Gradients -->
+        <LinearGradientBrush x:Key="PrimaryGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#0F172A" Offset="0"/>
+            <GradientStop Color="#1E293B" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <LinearGradientBrush x:Key="AccentGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#00D4FF" Offset="0"/>
+            <GradientStop Color="#7C3AED" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <LinearGradientBrush x:Key="CardGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#1E1E1E" Offset="0"/>
+            <GradientStop Color="#2A2A2A" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- Glass/Acrylic variants -->
+        <LinearGradientBrush x:Key="GlassAccentGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#8800D4FF" Offset="0"/>
+            <GradientStop Color="#887C3AED" Offset="1"/>
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="GlassCardBackground" Color="#80242424"/>
+
+        <!-- Black liquid variant for buttons -->
+        <LinearGradientBrush x:Key="BlackAccentGradient" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#B30A0A0A" Offset="0"/>
+            <GradientStop Color="#CC1A1A1A" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- Glass card style (liquid theme) -->
+        <Style x:Key="GlassCard" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource GlassCardBackground}"/>
+            <Setter Property="BorderBrush" Value="#303030"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="24"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" ShadowDepth="6" BlurRadius="18" Opacity="0.35"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Professional Button Style -->
+        <Style x:Key="ProfessionalButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource CardGradient}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#404040"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#000000" ShadowDepth="4" BlurRadius="10" Opacity="0.3"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource AccentGradient}"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentPrimary}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Professional Card Style -->
+        <Style x:Key="ProfessionalCard" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource CardGradient}"/>
+            <Setter Property="BorderBrush" Value="#404040"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="24"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" ShadowDepth="6" BlurRadius="20" Opacity="0.4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Professional CheckBox Style -->
+        <Style x:Key="ProfessionalCheckBox" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal">
+                            <Border x:Name="checkBorder" 
+                                    Width="20" Height="20" 
+                                    Background="{StaticResource SecondaryBackground}"
+                                    BorderBrush="#404040" 
+                                    BorderThickness="2"
+                                    CornerRadius="4"
+                                    Margin="0,0,12,0">
+                                <Path x:Name="checkMark"
+                                      Data="M 3 7 L 7 11 L 13 5"
+                                      Stroke="{StaticResource AccentPrimary}"
+                                      StrokeThickness="2.5"
+                                      Visibility="Collapsed"/>
+                            </Border>
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="checkMark" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="checkBorder" Property="Background" Value="{StaticResource AccentPrimary}"/>
+                                <Setter TargetName="checkBorder" Property="BorderBrush" Value="{StaticResource AccentPrimary}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="checkBorder" Property="BorderBrush" Value="{StaticResource AccentPrimary}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Premium Caption Button Styles -->
+        <SolidColorBrush x:Key="CaptionHover" Color="#30FFFFFF"/>
+        <SolidColorBrush x:Key="CaptionPressed" Color="#55FFFFFF"/>
+        <SolidColorBrush x:Key="CaptionBorder" Color="#40FFFFFF"/>
+        <SolidColorBrush x:Key="CaptionIcon" Color="#E5E5E5"/>
+        <SolidColorBrush x:Key="CaptionCloseHover" Color="#33EF4444"/>
+        <SolidColorBrush x:Key="CaptionClosePressed" Color="#66EF4444"/>
+
+        <Style x:Key="CaptionButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="{StaticResource CaptionIcon}"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="root" CornerRadius="8"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="root" Property="Background" Value="{StaticResource CaptionHover}"/>
+                                <Setter TargetName="root" Property="BorderBrush" Value="{StaticResource CaptionBorder}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="root" Property="Background" Value="{StaticResource CaptionPressed}"/>
+                                <Setter TargetName="root" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.96" ScaleY="0.96"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="root" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CaptionCloseButtonStyle" BasedOn="{StaticResource CaptionButtonStyle}" TargetType="Button">
+            <Setter Property="ToolTip" Value="Close"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource CaptionCloseHover}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{StaticResource CaptionClosePressed}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- ========== Liquid/Cam Scrollbars ========== -->
+        <!-- Shared brushes for scrollbars -->
+        <SolidColorBrush x:Key="ScrollTrackBrush" Color="#22FFFFFF"/>
+        <SolidColorBrush x:Key="ScrollTrackBrushHover" Color="#33FFFFFF"/>
+        <SolidColorBrush x:Key="ScrollThumbBorder" Color="#60FFFFFF"/>
+
+        <!-- Thumb template used by both orientations -->
+        <ControlTemplate x:Key="LiquidThumbTemplate" TargetType="Thumb">
+            <Border x:Name="ThumbBorder"
+                    CornerRadius="6"
+                    Background="{StaticResource GlassCardBackground}"
+                    BorderBrush="{StaticResource ScrollThumbBorder}"
+                    BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect Color="#000000" ShadowDepth="0" BlurRadius="10" Opacity="0.45"/>
+                </Border.Effect>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="ThumbBorder" Property="Background" Value="{StaticResource GlassAccentGradient}"/>
+                    <Setter TargetName="ThumbBorder" Property="BorderBrush" Value="{StaticResource AccentPrimary}"/>
+                </Trigger>
+                <Trigger Property="IsDragging" Value="True">
+                    <Setter TargetName="ThumbBorder" Property="Background" Value="{StaticResource AccentGradient}"/>
+                    <Setter TargetName="ThumbBorder" Property="BorderBrush" Value="{StaticResource AccentPrimary}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="ThumbBorder" Property="Opacity" Value="0.35"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!-- Vertical ScrollBar template -->
+        <ControlTemplate x:Key="VerticalLiquidScrollBarTemplate" TargetType="ScrollBar">
+            <Grid SnapsToDevicePixels="True">
+                <Border x:Name="TrackBg" Background="{StaticResource ScrollTrackBrush}" CornerRadius="6"/>
+                <Track x:Name="PART_Track" Focusable="False" IsDirectionReversed="True">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}" Visibility="Collapsed"/>
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb Width="10" MinHeight="20" Template="{StaticResource LiquidThumbTemplate}"/>
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Visibility="Collapsed"/>
+                    </Track.IncreaseRepeatButton>
+                </Track>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="TrackBg" Property="Background" Value="{StaticResource ScrollTrackBrushHover}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!-- Horizontal ScrollBar template -->
+        <ControlTemplate x:Key="HorizontalLiquidScrollBarTemplate" TargetType="ScrollBar">
+            <Grid SnapsToDevicePixels="True">
+                <Border x:Name="TrackBg" Background="{StaticResource ScrollTrackBrush}" CornerRadius="6" Height="10" VerticalAlignment="Center"/>
+                <Track x:Name="PART_Track" Focusable="False" IsDirectionReversed="False" Orientation="Horizontal">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Command="{x:Static ScrollBar.PageLeftCommand}" Visibility="Collapsed"/>
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb Height="10" MinWidth="20" Template="{StaticResource LiquidThumbTemplate}"/>
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Command="{x:Static ScrollBar.PageRightCommand}" Visibility="Collapsed"/>
+                    </Track.IncreaseRepeatButton>
+                </Track>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="TrackBg" Property="Background" Value="{StaticResource ScrollTrackBrushHover}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!-- Global ScrollBar Style (applies within this Window) -->
+        <Style TargetType="ScrollBar">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Width" Value="10"/>
+            <Setter Property="Template" Value="{StaticResource VerticalLiquidScrollBarTemplate}"/>
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="Height" Value="10"/>
+                    <Setter Property="Width" Value="Auto"/>
+                    <Setter Property="Template" Value="{StaticResource HorizontalLiquidScrollBarTemplate}"/>
+                </Trigger>
+                <Trigger Property="Orientation" Value="Vertical">
+                    <Setter Property="Width" Value="10"/>
+                    <Setter Property="Height" Value="Auto"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    
+    <!-- Custom chrome must be set on the Window itself, not on inner controls -->
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="0" ResizeBorderThickness="6" GlassFrameThickness="0" CornerRadius="0" UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
+    
+    <!-- Main Window Content with background image layer -->
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="pack://application:,,,/Assets/background.jpg"
+                        Stretch="UniformToFill" Opacity="0.35" AlignmentX="Center" AlignmentY="Center"/>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Optional subtle overlay to improve contrast over background -->
+        <Rectangle Fill="#A6000000" Grid.RowSpan="3" IsHitTestVisible="False" />
+
+        <!-- Header Section (Glass-like) with custom caption buttons -->
+        <Border Grid.Row="0" Padding="16,10" Background="{StaticResource GlassCardBackground}" BorderBrush="#404040" BorderThickness="1">
+            <Grid x:Name="TitleBar" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="108"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Title and subtitle -->
+                <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <TextBlock x:Name="AppTitleText" Text="⚡ UNLOST FPS BOOSTER" 
+                               FontSize="20" FontWeight="Bold" 
+                               Foreground="White"/>
+                    <TextBlock x:Name="AppSubtitleText" Text="Professional Performance Optimizer" 
+                               FontSize="11" FontWeight="Medium" 
+                               Foreground="#E0E0E0" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <!-- Status -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0,12,0">
+                    <Ellipse x:Name="StatusIndicator" Width="10" Height="10" Fill="{StaticResource AccentSuccess}" Margin="0,0,6,0"/>
+                    <TextBlock x:Name="StatusOnlineText" Text="● ONLINE" FontSize="10" FontWeight="Bold" Foreground="White"/>
+                </StackPanel>
+
+                <!-- Custom caption buttons -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,0">
+                    <!-- Minimize -->
+                    <Button x:Name="BtnMinimize" ToolTip="Minimize" Click="BtnMinimize_Click" Margin="0,0,8,0"
+                            Style="{StaticResource CaptionButtonStyle}">
+                        <iconPacks:PackIconMaterial Kind="WindowMinimize" Width="16" Height="16" Foreground="{StaticResource CaptionIcon}"/>
+                    </Button>
+                    <!-- Maximize/Restore -->
+                    <Button x:Name="BtnMaxRestore" ToolTip="Maximize" Click="BtnMaxRestore_Click" Margin="0,0,8,0"
+                            Style="{StaticResource CaptionButtonStyle}">
+                        <iconPacks:PackIconMaterial x:Name="MaxRestoreIcon" Kind="WindowMaximize" Width="16" Height="16" Foreground="{StaticResource CaptionIcon}"/>
+                    </Button>
+                    <!-- Close -->
+                    <Button x:Name="BtnClose" ToolTip="Close" Click="BtnClose_Click"
+                            Style="{StaticResource CaptionCloseButtonStyle}">
+                        <iconPacks:PackIconMaterial Kind="Close" Width="16" Height="16" Foreground="{StaticResource CaptionIcon}"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- Main Content Area -->
+        <Grid Grid.Row="1" Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="1.5*"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Left Panel - Optimization Settings (Liquid) -->
+            <Border Grid.Column="0" Style="{StaticResource GlassCard}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock x:Name="OptSettingsText" Text="🎯 Optimization Settings" 
+                                 FontSize="20" FontWeight="Bold" 
+                                 Foreground="{StaticResource AccentPrimary}"
+                                 Margin="0,0,0,8"/>
+                        <TextBlock x:Name="OptSubtitleText" Text="Configure advanced performance tweaks" 
+                                 FontSize="13" 
+                                 Foreground="{StaticResource TextSecondary}"
+                                 Margin="0,0,0,16"/>
+
+                        <!-- Selection Controls (moved to top) -->
+                        <Grid Margin="0,0,0,24">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="BtnSelectAll" Grid.Column="0" Content="✅ Select All" 
+                                    Style="{StaticResource ProfessionalButton}" 
+                                    Background="{StaticResource AccentSuccess}"
+                                    Click="BtnSelectAll_Click" Margin="0,0,8,0"/>
+                            <Button x:Name="BtnClearAll" Grid.Column="1" Content="❌ Clear All" 
+                                    Style="{StaticResource ProfessionalButton}"
+                                    Background="{StaticResource AccentDanger}"
+                                    Click="BtnClearAll_Click" Margin="8,0,0,0"/>
+                        </Grid>
+                        
+                        <!-- Core System Optimizations -->
+                <Border Background="{StaticResource GlassCardBackground}" 
+                    BorderBrush="#303030" BorderThickness="1"
+                    CornerRadius="8" Padding="20" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="🔧 Core System" FontSize="16" FontWeight="SemiBold" 
+                                         Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
+                                
+                                <CheckBox x:Name="ChkCleanTemp" Style="{StaticResource ProfessionalCheckBox}"
+                                        Content="🧹 Clean temporary files and cache"/>
+                                <CheckBox x:Name="ChkPowerPlan" Style="{StaticResource ProfessionalCheckBox}"
+                                        Content="⚡ Enable High Performance power plan"/>
+                                <CheckBox x:Name="ChkUltimate" Style="{StaticResource ProfessionalCheckBox}"
+                                        Content="🚀 Activate Ultimate Performance mode"/>
+                                <CheckBox x:Name="ChkVisualFX" Style="{StaticResource ProfessionalCheckBox}"
+                                        Content="✨ Optimize visual effects for performance"/>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- System Enhancement -->
+                <Border Background="{StaticResource GlassCardBackground}" 
+                    BorderBrush="#303030" BorderThickness="1"
+                    CornerRadius="8" Padding="20" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="🎮 Gaming Enhancement" FontSize="16" FontWeight="SemiBold" 
+                                         Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
+                                
+                                <CheckBox x:Name="ChkTransparency" Style="{StaticResource ProfessionalCheckBox}"
+                                        Content="🪟 Disable transparency effects"/>
+                                <CheckBox x:Name="ChkGameBar" Style="{StaticResource ProfessionalCheckBox}"
+                                        Content="🎮 Disable Xbox Game Bar and DVR"/>
+                                <CheckBox x:Name="ChkEnableGameMode" Style="{StaticResource ProfessionalCheckBox}"
+                                        Content="🕹️ Enable Windows Game Mode"/>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Advanced Optimizations -->
+                <Border Background="{StaticResource GlassCardBackground}" 
+                    BorderBrush="#303030" BorderThickness="1"
+                    CornerRadius="8" Padding="20" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="🔬 Advanced Operations" FontSize="16" FontWeight="SemiBold" 
+                                         Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
+                                
+                                <CheckBox x:Name="ChkCloseBackground" Style="{StaticResource ProfessionalCheckBox}"
+                                        Content="🔻 Close background applications"/>
+                                <CheckBox x:Name="ChkCleanupDesktop" Style="{StaticResource ProfessionalCheckBox}"
+                                        Content="🗂️ Organize desktop into folder"/>
+                                <CheckBox x:Name="ChkBlackWallpaper" Style="{StaticResource ProfessionalCheckBox}"
+                                        Content="🖼️ Set solid black wallpaper"/>
+                                <CheckBox x:Name="ChkDiskCleanup" Style="{StaticResource ProfessionalCheckBox}"
+                                        Content="🧽 Run disk and Windows Update cleanup"/>
+                <CheckBox x:Name="ChkNetworkOptimize" Style="{StaticResource ProfessionalCheckBox}"
+                    Content="🌐 Network optimization (low latency)"/>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Memory & Health -->
+                <Border Background="{StaticResource GlassCardBackground}" 
+                    BorderBrush="#303030" BorderThickness="1"
+                    CornerRadius="8" Padding="20">
+                            <StackPanel>
+                                <TextBlock Text="🧠 Memory and Health" FontSize="16" FontWeight="SemiBold" 
+                                         Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
+                                
+                                <CheckBox x:Name="ChkMemoryClean" Style="{StaticResource ProfessionalCheckBox}"
+                                        Content="💾 Advanced memory optimization"/>
+                                
+                                <!-- System Health Section with Description -->
+                <Border Background="#66101010" 
+                    BorderBrush="#303030" BorderThickness="1"
+                    CornerRadius="6" Padding="16" Margin="0,8,0,0">
+                                    <StackPanel>
+                                        <CheckBox x:Name="ChkSystemHealth" Style="{StaticResource ProfessionalCheckBox}"
+                                                Content="🩺 Comprehensive System Health Analysis"
+                                                Margin="0,0,0,12"/>
+                                        
+                                        <TextBlock x:Name="SystemHealthDesc" TextWrapping="Wrap" FontSize="11" 
+                                                 Foreground="{StaticResource TextSecondary}"
+                                                 Text="Performs deep system diagnostics including:"/>
+                                        
+                                        <StackPanel Margin="12,4,0,0">
+                                            <TextBlock x:Name="SystemHealthDetail1" FontSize="10" Foreground="{StaticResource AccentSuccess}"
+                                                     Text="• DISM component store integrity verification"/>
+                                            <TextBlock x:Name="SystemHealthDetail2" FontSize="10" Foreground="{StaticResource AccentSuccess}"
+                                                     Text="• SFC system file corruption scan"/>
+                                            <TextBlock x:Name="SystemHealthDetail3" FontSize="10" Foreground="{StaticResource AccentSuccess}"
+                                                     Text="• Windows image health analysis"/>
+                                            <TextBlock x:Name="SystemHealthDetail4" FontSize="10" Foreground="{StaticResource AccentSuccess}"
+                                                     Text="• Automatic corruption repair"/>
+                                            <TextBlock x:Name="SystemHealthDetail5" FontSize="10" Foreground="{StaticResource AccentSuccess}"
+                                                     Text="• Performance optimization recommendations"/>
+                                        </StackPanel>
+                                        
+                                        <TextBlock x:Name="SystemHealthFooter" TextWrapping="Wrap" FontSize="10" FontStyle="Italic"
+                                                 Foreground="{StaticResource AccentPrimary}" Margin="0,8,0,0"
+                                                 Text="Essential for maintaining optimal system stability and performance."/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Selection Controls were moved to top -->
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+            
+            <!-- Right Panel - System Status & Controls (scrollable) -->
+            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- System Status Dashboard -->
+                <Border Style="{StaticResource GlassCard}" Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock x:Name="SystemStatusText" Text="📊 System Status" 
+                                 FontSize="18" FontWeight="Bold" 
+                                 Foreground="{StaticResource AccentPrimary}"
+                                 Margin="0,0,0,16"/>
+                        
+                        <!-- CPU Usage -->
+                        <Grid Margin="0,0,0,12">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <Grid Grid.Row="0">
+                                <TextBlock x:Name="CpuUsageText" Text="CPU Usage" 
+                                         Foreground="{StaticResource TextPrimary}" FontWeight="SemiBold"/>
+                                <TextBlock x:Name="CpuPercentText" Text="0%" 
+                                         HorizontalAlignment="Right"
+                                         Foreground="{StaticResource AccentPrimary}" FontWeight="Bold"/>
+                            </Grid>
+                            
+                            <Border Grid.Row="1" Background="{StaticResource SecondaryBackground}" 
+                                  Height="8" CornerRadius="4" Margin="0,4,0,0">
+                                <Border x:Name="CpuUsageBar" Background="{StaticResource AccentPrimary}" 
+                                      HorizontalAlignment="Left" CornerRadius="4" Width="0"/>
+                            </Border>
+                        </Grid>
+                        
+                        <!-- RAM Usage -->
+                        <Grid Margin="0,0,0,16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <Grid Grid.Row="0">
+                                <TextBlock x:Name="RamUsageText" Text="RAM Usage" 
+                                         Foreground="{StaticResource TextPrimary}" FontWeight="SemiBold"/>
+                                <TextBlock x:Name="RamPercentText" Text="0%" 
+                                         HorizontalAlignment="Right"
+                                         Foreground="{StaticResource AccentWarning}" FontWeight="Bold"/>
+                            </Grid>
+                            
+                            <Border Grid.Row="1" Background="{StaticResource SecondaryBackground}" 
+                                  Height="8" CornerRadius="4" Margin="0,4,0,0">
+                                <Border x:Name="RamUsageBar" Background="{StaticResource AccentWarning}" 
+                                      HorizontalAlignment="Left" CornerRadius="4" Width="0"/>
+                            </Border>
+                        </Grid>
+                        
+                        <!-- Status Pills -->
+                        <UniformGrid Columns="2" Margin="0,8,0,0">
+                            <Border x:Name="ReadyPill" Background="{StaticResource AccentSuccess}" 
+                                  CornerRadius="12" Padding="8,4" Margin="0,0,4,0">
+                                <TextBlock x:Name="StatusReadyText" Text="READY" 
+                                         FontSize="10" FontWeight="Bold" 
+                                         Foreground="White" HorizontalAlignment="Center"/>
+                            </Border>
+                            <Border x:Name="HealthPill" Background="{StaticResource AccentSuccess}" 
+                                  CornerRadius="12" Padding="8,4" Margin="4,0,0,0">
+                                <TextBlock x:Name="HealthStatusText" Text="HEALTHY" 
+                                         FontSize="10" FontWeight="Bold" 
+                                         Foreground="White" HorizontalAlignment="Center"/>
+                            </Border>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+                
+                <!-- Quick Actions removed per request -->
+                
+                <!-- Operation Log -->
+                <Border Style="{StaticResource GlassCard}">
+                    <StackPanel>
+                        <TextBlock x:Name="OperationLogText" Text="📝 Operation Log" 
+                                 FontSize="16" FontWeight="Bold" 
+                                 Foreground="{StaticResource AccentPrimary}"
+                                 Margin="0,0,0,12"/>
+                        
+                        <ScrollViewer Height="200" VerticalScrollBarVisibility="Auto">
+                            <Border Background="{StaticResource PrimaryBackground}" 
+                                  CornerRadius="6" Padding="16">
+                                <TextBlock x:Name="TxtLog" 
+                                         Text="🚀 System ready for optimization...&#x0a;💡 All components loaded successfully&#x0a;✅ Performance engine initialized" 
+                                         Foreground="{StaticResource AccentSuccess}" 
+                                         TextWrapping="Wrap"
+                                         FontFamily="Cascadia Code,Consolas,monospace" 
+                                         FontSize="11"/>
+                            </Border>
+                        </ScrollViewer>
+
+                                                <!-- GPU Performans Rehberi -->
+                                                <Expander Header="🎯 GPU Performans Rehberi (NVIDIA + AMD)" Margin="0,12,0,0"
+                                                                    Background="{StaticResource GlassCardBackground}" Foreground="{StaticResource TextPrimary}">
+                                                        <Border Background="#0F0F0F" CornerRadius="6" Padding="12" BorderBrush="#303030" BorderThickness="1">
+                                                                <StackPanel>
+                                                                        <TextBlock x:Name="TxtGpuGuide" TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextSecondary}">
+1) Windows (genel)
+- Bu uygulamadaki ‘High Performance’ GPU tercihi zaten uygulanır.
+- Güç planını High/Ultimate yap, HAGS açık olsun.
+- PCIe Link State Power Management: Off (AC/DC).
+
+2) NVIDIA Control Panel
+- Manage 3D Settings → Global:
+    • Power management mode: Prefer maximum performance
+    • Low Latency Mode: On (veya Ultra)
+    • Texture filtering - Quality: High performance
+    • Threaded optimization: On
+    • Vertical sync: Off (oyuna göre)
+- Program Settings: Sorun çıkaran oyunlar için özel profil uygula.
+
+3) AMD Adrenalin
+- Graphics → Global:
+    • Radeon Anti-Lag/Anti-Lag+: Kapalı (gerekirse oyun bazlı aç)
+    • Radeon Chill: Kapalı
+    • Texture Filtering Quality: Performance
+    • Surface Format Optimization: On
+    • Wait for Vertical Refresh (VSync): Off (oyuna göre)
+    • Power Tuning: Aç ve güç limitini biraz artır (sistemine göre)
+
+4) Ek İpuçları
+- Oyun içi FPS limiti ve VSync’i çakıştırma (ikisi birden kapalı veya tek bir yerde yönet).
+- Pencere modlarını dene (Fullscreen vs Borderless). Bazı oyunlarda FSE daha iyi.
+- Overlay’leri azalt (Discord/Steam/GeForce Overlay vs.).
+                                                                        </TextBlock>
+                                                                        <Button x:Name="BtnCopyGpuGuide" Content="📋 Rehberi Kopyala" Margin="0,10,0,0"
+                                                                                        Style="{StaticResource ProfessionalButton}" Click="BtnCopyGpuGuide_Click"/>
+                                                                </StackPanel>
+                                                        </Border>
+                                                </Expander>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            </ScrollViewer>
+        </Grid>
+        
+        <!-- Footer - Main Action Button -->
+        <!-- Footer Section (Glass-like) -->
+        <Border Grid.Row="2" Padding="20,15" Background="{StaticResource GlassCardBackground}" BorderBrush="#404040" BorderThickness="1">
+            <Button x:Name="BtnOptimize" Content="🚀 OPTIMIZE SYSTEM NOW" 
+                    Style="{StaticResource ProfessionalButton}"
+                    Background="{StaticResource BlackAccentGradient}"
+                    BorderBrush="#606060"
+                    FontSize="16" FontWeight="Bold"
+                    Height="50" Click="BtnOptimize_Click">
+                <Button.Effect>
+                    <DropShadowEffect Color="#000000" 
+                                      ShadowDepth="0" BlurRadius="18" Opacity="0.55"/>
+                </Button.Effect>
+            </Button>
+        </Border>
+    </Grid>
+</Window>

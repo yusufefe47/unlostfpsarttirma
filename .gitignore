@@ -1,0 +1,45 @@
+# Visual Studio / .NET / WPF
+.vs/
+**/bin/
+**/obj/
+app.publish/
+TestResults/
+*.user
+*.suo
+*.cache
+*.pdb
+*.ipch
+*.aps
+*.ncb
+*.opendb
+*.VC.db
+*.VC.opendb
+*.log
+*.tlog
+*.lastcodeanalysissucceeded
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+.nuget/
+
+# Build outputs / publish
+publish/
+**/publish/
+
+# OS-specific
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Rider/VS Code/others
+.idea/
+*.iml
+.vscode/
+
+# Misc
+*.bak
+*.tmp
+*.swp

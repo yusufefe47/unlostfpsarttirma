@@ -1,0 +1,94 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    <Company>Unlost Software</Company>
+    <Product>Unlost FPS Booster</Product>
+    <Description>Windows için gelişmiş FPS ve sistem optimizasyon aracı.</Description>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.0</Version>
+    <NeutralLanguage>tr-TR</NeutralLanguage>
+    <Copyright>© 2025 Unlost Software. All rights reserved.</Copyright>
+    <AssemblyTitle>Unlost FPS Booster</AssemblyTitle>
+    <Authors>Unlost Software</Authors>
+    <!-- Disable inheriting Directory.Build.* from parent dirs to avoid external signing targets -->
+    <ImportDirectoryBuildProps>false</ImportDirectoryBuildProps>
+    <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
+    <!-- Ensure strong-name/code signing is off unless explicitly configured -->
+    <SignAssembly>false</SignAssembly>
+  <!-- İstenen çıktı exe adı -->
+  <AssemblyName>unlostfpsarttirma</AssemblyName>
+  <PackageId>unlostfpsarttirma</PackageId>
+    <RepositoryUrl>https://github.com/unlost/fps-booster</RepositoryUrl>
+    <!-- Antivirüs dostu tek dosya ayarları: gereksiz sıkıştırmayı azalt -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <EnableCompressionInSingleFile>false</EnableCompressionInSingleFile>
+    <PublishTrimmed>false</PublishTrimmed>
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <!-- DLL loading hatası için native library ayarları -->
+  <IncludeAllContentForSelfExtract>false</IncludeAllContentForSelfExtract>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <IncludeWindowsDesktopFrameworkInSingleFile>true</IncludeWindowsDesktopFrameworkInSingleFile>
+    <!-- Runtime configuration -->
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <SatelliteResourceLanguages>en;tr</SatelliteResourceLanguages>
+    <!-- Bkav Pro W64.AIDetectMalware false positive'ini önlemek için -->
+    <DebuggerSupport>true</DebuggerSupport>
+    <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
+    <TieredCompilation>false</TieredCompilation>
+    <OptimizationPreference>Size</OptimizationPreference>
+  <!-- Uygulama ikonu: Assets\app.ico konumuna yerleştirin -->
+  <ApplicationIcon Condition="Exists('Assets\\app.ico')">Assets\app.ico</ApplicationIcon>
+  </PropertyGroup>
+  <!-- Release derlemelerde PDB ve referans çıktılarını kapat -->
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>None</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <!-- PDB ve referans derlemeleri oluşturma -->
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <!-- AV dostu: saldırı vektörlerini azalt -->
+    <UseSharedCompilation>false</UseSharedCompilation>
+    <Deterministic>true</Deterministic>
+    <PathMap>$(MSBuildProjectDirectory)=.</PathMap>
+    <!-- W64.AIDetectMalware için agresif önlemler -->
+    <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+    <IlcFoldIdenticalMethodBodies>false</IlcFoldIdenticalMethodBodies>
+    <EventSourceSupport>false</EventSourceSupport>
+    <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
+    <UseSystemResourceKeys>true</UseSystemResourceKeys>
+    <!-- DLL loading stability için -->
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  <Resource Include="Assets\**\*.*" />
+  </ItemGroup>
+  <!-- Exclude CS2-related files from build and resources (safety in case files remain on disk) -->
+  <ItemGroup>
+    <Compile Remove="Cs2AutoexecTemplate.cs" />
+    <None Remove="Assets\Cs2\**\*.*" />
+    <Resource Remove="Assets\Cs2\**\*.*" />
+    <Content Remove="Assets\Cs2\**\*.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentWPF" Version="0.10.2" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+  </ItemGroup>
+
+  <!-- Publish sonrası PDB’yi tek dosya dağıtımından temizle -->
+  <Target Name="RemovePdbFromPublish" AfterTargets="Publish">
+    <ItemGroup>
+      <_PdbToDelete Include="$(PublishDir)\*.pdb" />
+    </ItemGroup>
+    <Delete Files="@(_PdbToDelete)" ContinueOnError="true" />
+  </Target>
+</Project>

@@ -1,0 +1,18 @@
+{
+  "runtimeOptions": {
+    "tfm": "net9.0",
+    "rollForward": "LatestMajor",
+    "framework": {
+      "name": "Microsoft.WindowsDesktop.App",
+      "version": "9.0.0"
+    },
+    "configProperties": {
+      "System.Globalization.Invariant": false,
+      "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": false,
+      "System.Windows.Forms.ApplicationHighDpiMode": "SystemAware"
+    },
+    "additionalProbingPaths": [
+      "."
+    ]
+  }
+}
