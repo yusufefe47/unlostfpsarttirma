@@ -1,4 +1,4 @@
-# UNLOST FPS Booster (WPF)
+# unlostfpsbooster (WPF)
 
 Ultra-modern cam/liquid temalı, tek tıkla güvenli performans optimizasyonları uygulayan taşınabilir WPF uygulaması.
 
@@ -12,6 +12,14 @@ Ultra-modern cam/liquid temalı, tek tıkla güvenli performans optimizasyonlar�
 - Ağ için düşük gecikme optimizasyonları uygular (isteğe bağlı)
 
 > Not: Bazı ayarlar için yönetici hakları gerekir. Uygulama gerektiğinde yükseltme ister.
+
+## Kurulum ve Çalıştırma
+Uygulama “portable” tek dosya EXE olarak yayınlanabilir, .NET kurulumuna gerek yoktur.
+
+- Geliştiriciler için: `UnlostFpsWpf` projesini açın ve aşağıdaki komutla tek dosya yayın alın.
+  - Windows x64, self-contained, tek dosya yayın (Release):
+    - VS Code Görevleri ile hazırdır veya `dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish`
+  - Çıktı: `UnlostFpsWpf/publish/unlostfpsbooster.exe`
 
 ## Geri Alma
 - Güç planı: Denetim Masası > Güç Seçenekleri’nden önceki planı seçin.

@@ -7,14 +7,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     <Company>Unlost Software</Company>
-    <Product>Unlost FPS Booster</Product>
+  <Product>unlostfpsbooster</Product>
     <Description>Windows için gelişmiş FPS ve sistem optimizasyon aracı.</Description>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
     <Version>1.0.0</Version>
     <NeutralLanguage>tr-TR</NeutralLanguage>
     <Copyright>© 2025 Unlost Software. All rights reserved.</Copyright>
-    <AssemblyTitle>Unlost FPS Booster</AssemblyTitle>
+  <AssemblyTitle>unlostfpsbooster</AssemblyTitle>
     <Authors>Unlost Software</Authors>
     <!-- Disable inheriting Directory.Build.* from parent dirs to avoid external signing targets -->
     <ImportDirectoryBuildProps>false</ImportDirectoryBuildProps>
@@ -22,8 +22,8 @@
     <!-- Ensure strong-name/code signing is off unless explicitly configured -->
     <SignAssembly>false</SignAssembly>
   <!-- İstenen çıktı exe adı -->
-  <AssemblyName>unlostfpsarttirma</AssemblyName>
-  <PackageId>unlostfpsarttirma</PackageId>
+  <AssemblyName>unlostfpsbooster</AssemblyName>
+  <PackageId>unlostfpsbooster</PackageId>
     <RepositoryUrl>https://github.com/unlost/fps-booster</RepositoryUrl>
     <!-- Antivirüs dostu tek dosya ayarları: gereksiz sıkıştırmayı azalt -->
     <PublishSingleFile>true</PublishSingleFile>
