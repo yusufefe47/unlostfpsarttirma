@@ -29,4 +29,4 @@ Ultra-modern cam/liquid temalı, tek tıkla güvenli performans optimizasyonlar�
 Bu proje Unlost’tan bağımsızdır. Kaldırmamı isterseniz ergyusuf34@gmail.com’a yazabilirsiniz.
 
 ## Katkı
-Pull request’ler kabul edilir. Sorun/öneri için “Issues” açabilirsiniz.   a 
+Pull request’ler kabul edilir. Sorun/öneri için “Issues” açabilirsiniz.
